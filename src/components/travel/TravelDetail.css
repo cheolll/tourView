@@ -1,0 +1,45 @@
+.travel-detail {
+  min-height: 100vh;
+  background: #fff;
+  color: #171717;
+}
+
+.travel-detail__inner {
+  width: min(1120px, calc(100% - 80px));
+  margin: 0 auto;
+  padding: 60px 0 120px;
+}
+
+.travel-detail__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: #777;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+}
+
+.travel-detail__back span {
+  font-size: 20px;
+  line-height: 1;
+
+  transition: transform 0.2s ease;
+}
+
+.travel-detail__back:hover {
+  color: #171717;
+}
+
+.travel-detail__back:hover span {
+  transform: translateX(-4px);
+}

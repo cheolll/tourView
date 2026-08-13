@@ -1,155 +1,118 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Travel.css';
-import { useTourPlaces } from '../../queries/tourQueries';
-import type { TourApiParam } from '../../types/tour';
+import { useRegions, useTourPlaces, useTourSearch } from '../../queries/tourQueries';
+import { useNavigate } from 'react-router-dom';
 
-type Region = '전체' | '서울' | '경기' | '인천' | '강원' | '충청' | '경상' | '전라' | '제주';
-
-interface Place {
-  id: number;
-  name: string;
-  region: Exclude<Region, '전체'>;
-  description: string;
-  image: string;
-}
-
-const regions: Region[] = [
-  '전체',
-  '서울',
-  '경기',
-  '인천',
-  '강원',
-  '제주',
-  '충청',
-  '경상',
-  '전라'
-];
-
-const places: Place[] = [
-  {
-    id: 1,
-    name: '경복궁',
-    region: '서울',
-    description: '조선 왕조의 대표적인 궁궐',
-    image:
-      'https://images.unsplash.com/photo-1538485399081-7c897c9e1fbe?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 2,
-    name: '남산서울타워',
-    region: '서울',
-    description: '서울의 전경을 한눈에 볼 수 있는 전망 명소',
-    image:
-      'https://images.unsplash.com/photo-1535189043414-47a3c49a0bed?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 3,
-    name: '북촌한옥마을',
-    region: '서울',
-    description: '전통 한옥이 모여 있는 서울의 대표 관광지',
-    image:
-      'https://images.unsplash.com/photo-1546874177-9e664107314e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 4,
-    name: '수원화성',
-    region: '경기',
-    description: '정조 시대에 축조된 역사적인 성곽',
-    image:
-      'https://images.unsplash.com/photo-1596609548086-85bbf8ddb6b9?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 5,
-    name: '가평 아침고요수목원',
-    region: '경기',
-    description: '사계절 아름다운 정원을 만날 수 있는 곳',
-    image:
-      'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 6,
-    name: '송도 센트럴파크',
-    region: '인천',
-    description: '도심 속에서 여유를 즐길 수 있는 수변 공원',
-    image:
-      'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 7,
-    name: '강릉 안목해변',
-    region: '강원',
-    description: '바다와 카페거리를 함께 즐길 수 있는 해변',
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 8,
-    name: '설악산',
-    region: '강원',
-    description: '사계절 아름다운 풍경을 자랑하는 명산',
-    image:
-      'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 9,
-    name: '성산일출봉',
-    region: '제주',
-    description: '제주의 대표적인 자연 경관과 일출 명소',
-    image:
-      'https://images.unsplash.com/photo-1471922694854-ff1b63b20054?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 10,
-    name: '협재해수욕장',
-    region: '제주',
-    description: '에메랄드빛 바다와 하얀 모래사장이 아름다운 해변',
-    image:
-      'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=80',
-  },
-];
 
 const Travel = () => {
-  const [selectedRegion, setSelectedRegion] = useState<Region>('전체');
-  const [keyword, setKeyword] = useState('');
+  const [selectedRegionCode, setSelectedRegionCode] = useState<string>();
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchParams, setSearchParams] = useState('');
+  const [showTopButton, setShowTopButton] = useState(false);
 
-  const filteredPlaces = useMemo(() => {
-    const searchKeyword = keyword.trim().toLowerCase();
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-    return places.filter((place) => {
-      const regionMatch =
-        selectedRegion === '전체' || place.region === selectedRegion;
-
-      const searchMatch =
-        !searchKeyword ||
-        place.name.toLowerCase().includes(searchKeyword) ||
-        place.description.toLowerCase().includes(searchKeyword);
-
-      return regionMatch && searchMatch;
-    });
-  }, [selectedRegion, keyword]);
-
-  const [searchParams, setSearchParams] = useState<TourApiParam | null>(null);
+  const isSearching = searchParams.length > 0;
 
   const handleSearch = () => {
-    setKeyword(keyword.trim());
-    setSearchParams({
-      pageNo: 1,
-      numOfRows: 10,
-      contentTypeId: '12',
-      lDongRegnCd: '26',
-    });
+    setSearchParams(searchKeyword.trim());
   };
+
+  const { data: regions =[] , isLoading: isLoadingRegions} = useRegions();
 
   const {
     data,
     isLoading,
     isError,
-  } = useTourPlaces(searchParams);
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage
+  } = useTourPlaces(
+    {
+      numOfRows: 10,
+      contentTypeId: '12',
+      lDongRegnCd: selectedRegionCode,
+    },
+    {
+      enabled: !isSearching,
+    }
+  );
+  
+  const {
+    data: searchData,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+    fetchNextPage: fetchNextSearchPage,
+    hasNextPage: hasNextSearchPage,
+    isFetchingNextPage: isFetchingNextSearchPage
+  } = useTourSearch({
+    numOfRows: 10,
+    keyword: searchParams,
+    lDongRegnCd: selectedRegionCode,
+  })
 
-  if(isLoading) {
-    console.log('loading..')
+  const places = isSearching ? searchData?.pages.flatMap((page) => page.items)  ?? [] : data?.pages.flatMap((page) => page.items) ?? [];
+
+  const loading = isSearching ? isSearchLoading : isLoading
+  const error = isSearching ? isSearchError : isError
+
+  const totalCount = isSearching
+  ? searchData?.pages[0]?.totalCount
+  : data?.pages[0]?.totalCount;
+
+  const fetchNext = isSearching ? fetchNextSearchPage : fetchNextPage;
+
+  const hasNext = isSearching
+    ? hasNextSearchPage
+    : hasNextPage;
+
+  const isFetchingNext = isSearching
+    ? isFetchingNextSearchPage
+    : isFetchingNextPage;
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+
+    if(!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if(entries[0].isIntersecting && hasNext && !isFetchingNext){
+          fetchNext();
+        }
+      },{threshold: 0.1},
+    )
+    observer.observe(target);
+
+    return () => observer.disconnect();
+  },[fetchNext, hasNext, isFetchingNext])
+
+  const getRegionName = (code?: string) => {
+    return regions.find((region) => region.code === code)?.name ?? ''
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowTopButton(window.scrollY > 500);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const navigate = useNavigate();
+
+
+
+  
   return (
     <main className="travel">
       {/* Hero */}
@@ -175,18 +138,18 @@ const Travel = () => {
               <span className="travel__region-label">지역</span>
 
               <div className="travel__regions">
-                {regions.map((region) => (
+                {!isLoadingRegions && regions.map((region) => (
                   <button
                     type="button"
-                    key={region}
+                    key={region.code ?? 'all'}
                     className={
-                      selectedRegion === region
+                      (selectedRegionCode ?? '') === (region.code ?? '')
                         ? 'active'
                         : ''
                     }
-                    onClick={() => setSelectedRegion(region)}
+                    onClick={() => setSelectedRegionCode(region.code)}
                   >
-                    {region}
+                    {region.name}
                   </button>
                 ))}
               </div>
@@ -197,9 +160,9 @@ const Travel = () => {
 
               <input
                 type="text"
-                value={keyword}
+                value={searchKeyword}
                 placeholder="여행지 또는 관광지를 검색해보세요"
-                onChange={(event) => setKeyword(event.target.value)}
+                onChange={(event) => setSearchKeyword(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter') {
                     handleSearch();
@@ -228,39 +191,55 @@ const Travel = () => {
             </span>
 
             <h2>
-              {selectedRegion === '전체'
-                ? '여행지를 탐색해보세요.'
-                : `${selectedRegion}의 여행지`}
+              {selectedRegionCode
+                ? `${getRegionName(selectedRegionCode)}의 여행지`
+                : '여행지를 탐색해보세요.'}
             </h2>
           </div>
 
           <span className="travel__count">
-            {filteredPlaces.length}개의 여행지
+            {totalCount}개의 여행지
           </span>
         </div>
 
-        {filteredPlaces.length > 0 ? (
+        {/* 첫 페이지 로딩 */}
+        {loading && (
+          <div className="travel__empty">
+            <p>여행지를 불러오는 중입니다.</p>
+          </div>
+        )}
+
+        {/* 에러 */}
+        {error && (
+          <div className="travel__empty">
+            <p>여행지를 불러오지 못했습니다.</p>
+          </div>
+        )}
+
+        {/* 여행지 */}
+        {!loading && !error && places.length > 0 && (
           <div className="travel__grid">
-            {filteredPlaces.map((place) => (
+            {places.map((place) => (
               <article
                 className="travel-card"
-                key={place.id}
+                key={place.contentid}
+                onClick={() => navigate(`/travel/${place.contentid}`)}
               >
                 <div className="travel-card__image">
                   <img
-                    src={place.image}
-                    alt={place.name}
+                    src={place.firstimage || place.firstimage2 || '/images/no-image.svg'}
+                    alt={place.title}
                   />
 
                   <span className="travel-card__region">
-                    {place.region}
+                    {getRegionName(place.lDongRegnCd)}
                   </span>
                 </div>
 
                 <div className="travel-card__content">
-                  <h3>{place.name}</h3>
+                  <h3>{place.title}</h3>
 
-                  <p>{place.description}</p>
+                  <p>{place.addr1}</p>
 
                   <span className="travel-card__more">
                     VIEW PLACE
@@ -270,7 +249,10 @@ const Travel = () => {
               </article>
             ))}
           </div>
-        ) : (
+        )}
+
+        {/* 결과 없음 */}
+        {!loading && !error && places.length === 0  && (
           <div className="travel__empty">
             <span>⌕</span>
             <p>검색 결과가 없습니다.</p>
@@ -280,14 +262,39 @@ const Travel = () => {
           </div>
         )}
 
-        {filteredPlaces.length > 0 && (
+        {/* 무한스크롤 감지 영역 */}
+        {places.length > 0 && (
+          <div ref={loadMoreRef} className='travel__load-more' />
+        )}
+
+        {/* 다음 페이지 로딩 */}
+        {isFetchingNext && (
           <div className="travel__loading">
             <span />
             <span />
             <span />
           </div>
         )}
+
+        {/* 더 불러올 데이터가 없을 때 */}
+        {!hasNext && places.length > 0 && (
+          <div className="travel__end">
+            더 이상 여행지가 없습니다.
+          </div>
+        )}
       </section>
+
+      {showTopButton && (
+        <button
+          type="button"
+          className="travel__top-button"
+          onClick={scrollToTop}
+          aria-label="맨 위로 이동"
+        >
+          <span>↑</span>
+        </button>
+      )}
+
     </main>
   );
 };

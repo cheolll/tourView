@@ -1,0 +1,41 @@
+import type { Region } from "../types/region";
+
+export const regions: Region[] = [
+  { name: '전체' },
+  { name: '서울', code: '11' },
+  { name: '인천', code: '28' },
+  { name: '대전', code: '30' },
+  { name: '대구', code: '27' },
+  { name: '광주', code: '29' },
+  { name: '부산', code: '26' },
+  { name: '울산', code: '31' },
+  { name: '세종', code: '36110' },
+  { name: '경기', code: '41' },
+  { name: '강원', code: '51' },
+  { name: '충북', code: '43' },
+  { name: '충남', code: '44' },
+  { name: '전북', code: '52' },
+  { name: '전남', code: '12' },
+  { name: '경북', code: '47' },
+  { name: '경남', code: '48' },
+  { name: '제주', code: '50' },
+];
+
+export const regionNameMap: Record<string, string> = {
+  '11': '서울',
+  '12': '전남',
+  '26': '부산',
+  '27': '대구',
+  '28': '인천',
+  '30': '대전',
+  '31': '울산',
+  '41': '경기',
+  '43': '충북',
+  '44': '충남',
+  '47': '경북',
+  '48': '경남',
+  '50': '제주',
+  '51': '강원',
+  '52': '전북',
+  '36110': '세종',
+};

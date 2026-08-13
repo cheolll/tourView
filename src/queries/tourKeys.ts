@@ -1,4 +1,4 @@
-import type { TourApiParam } from "../types/tour";
+import type { TourPlacesParams, TourSearchParams } from "../types/tour";
 
 
 export const tourKeys = {
@@ -6,5 +6,10 @@ export const tourKeys = {
 
     places: () => [...tourKeys.all] as const,
 
-    placeList: (params: TourApiParam) => [...tourKeys.places(), 'list' ,params] as const
+    placeList: (params: TourPlacesParams) => [...tourKeys.places(), 'list' ,params] as const,
+
+    search: () => [...tourKeys.all, 'search'] as const,
+
+    searchList: (params: TourSearchParams) => [...tourKeys.search(), 'list', params] as const,
+
 }

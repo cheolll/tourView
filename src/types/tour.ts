@@ -21,40 +21,43 @@ lclsSystm2	분류체계 중분류	0	NA04	분류체계 중분류
 lclsSystm3	분류체계 소분류	0	NA040500	분류체계 소분류
  */
 export interface TourItem {
-    addr1?: string; 
+    addr1?: string;
     addr2?: string;
-
+    
+    areacode?: string;
+    
+    cat1?: string;
+    cat2?: string;
+    cat3?: string;
+    
     contentid: string;
     contenttypeid: string;
+    
     createdtime: string;
-
+    
     firstimage?: string;
     firstimage2?: string;
+    
     cpyrhtDivCd?: string;
     
     mapx?: string;
     mapy?: string;
     mlevel?: string;
-    // areacode: string,
     
-    modifiedtime: string,
-    tel?: string,
-    // sigungucode: string,
+    modifiedtime: string;
     
-    title: string,
-    zipcode?: string,
-    // cat1: string,
-    // cat2: string,
-    // cat3: string,
+    sigungucode?: string;
     
-
-    lDongRegnCd?: string,
-    lDongSignguCd?: string,
-
-    lclsSystm1?: string,
-    lclsSystm2?: string
-    lclsSystm3?: string,
+    tel?: string;
+    title: string;
+    zipcode?: string;
     
+    lDongRegnCd?: string;
+    lDongSignguCd?: string;
+    
+    lclsSystm1?: string;
+    lclsSystm2?: string;
+    lclsSystm3?: string;
 
 }
 
@@ -75,7 +78,13 @@ export interface TourApiResponse {
             totalCount: number;
         }
     }
+}
 
+export interface TourListResponse {
+    items: TourItem[];
+    pageNo: number;
+    numOfRows: number;
+    totalCount: number;
 }
 
 export interface TourApiRequest {
@@ -103,17 +112,36 @@ export interface TourApiRequest {
 }
 
 
-export interface TourApiParam {
+
+
+export interface TourSearchParams {
     pageNo?: number;
     numOfRows?: number;
-  
+    
     arrange?: 'A' | 'C' | 'D' | 'O' | 'Q' | 'R';
-  
-    contentTypeId?: string;
-  
+    
+    keyword: string;
+    
     lDongRegnCd?: string;
     lDongSignguCd?: string;
-  
+    
+    lclsSystm1?: string;
+    lclsSystm2?: string;
+    lclsSystm3?: string;
+}
+
+export interface TourPlacesParams {
+    pageNo?: number;
+    numOfRows?: number;
+    
+    arrange?: 'A' | 'C' | 'D' | 'O' | 'Q' | 'R';
+    
+    contentTypeId?: string;
+    modifiedtime?: string;
+    
+    lDongRegnCd?: string;
+    lDongSignguCd?: string;
+    
     lclsSystm1?: string;
     lclsSystm2?: string;
     lclsSystm3?: string;

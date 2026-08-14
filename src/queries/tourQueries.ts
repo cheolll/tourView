@@ -69,13 +69,11 @@ export const useTourSearch = (
 }
 
 export const useTourDetailCommon = (
-    contentId: string
+    contentId?: string
 ) => {
     return useQuery({
-        queryKey: tourKeys.detailCommon(
-            contentId ?? ''
-        ),
-        queryFn: () => getTourDetailCommon({ contentId }),
+        queryKey: tourKeys.detailCommon(contentId),
+        queryFn: () => getTourDetailCommon({ contentId: contentId! }),
         enabled: !!contentId
     })
 }

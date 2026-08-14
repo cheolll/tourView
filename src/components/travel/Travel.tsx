@@ -249,7 +249,7 @@ const Travel = () => {
               >
                 <div className="travel-card__image">
                   <img
-                    src={place.firstimage || place.firstimage2 || '/images/no-image.svg'}
+                    src={place.firstimage || place.firstimage2 || `${import.meta.env.BASE_URL}images/no-image.svg`}
                     alt={place.title}
                   />
 

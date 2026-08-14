@@ -3,6 +3,7 @@ import './App.css'
 import Travel from './components/travel/Travel'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import TravelDetail from './components/travel/TravelDetail';
+import Header from './components/common/Header';
 
 const queryClient = new QueryClient();
 
@@ -11,6 +12,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter basename='/tourView'>
+          <Header />
           <Routes>
             <Route path='/' element={<Travel />}/>
             <Route path='/travel/:contentId' element={<TravelDetail />}/>

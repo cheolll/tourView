@@ -28,4 +28,4 @@
 //     );
 // };
 
-// export default TravelDetailCommon;
+// export default TravelDetailCommon; 

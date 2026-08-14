@@ -12,4 +12,8 @@ export const tourKeys = {
 
     searchList: (params: TourSearchParams) => [...tourKeys.search(), 'list', params] as const,
 
+    detailCommon: (contentId: string ) => [...tourKeys.all, 'detailCommon', contentId] as const,
+
+    detailInfo: (contentId: string, contentTypeId: string ) => [...tourKeys.all, 'detailInfo', contentId, contentTypeId] as const,
+
 }

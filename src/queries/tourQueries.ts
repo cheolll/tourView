@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { tourKeys } from "./tourKeys"
-import { getRegions, getTourPlaces, getTourSearch } from "../api/tourApi"
+import { getRegions, getTourDetailCommon, getTourDetailInfo, getTourPlaces, getTourSearch } from "../api/tourApi"
 import type { TourPlacesParams, TourSearchParams } from "../types/tour"
 
 
@@ -15,11 +15,11 @@ export const useRegions = (
 
 export const useTourPlaces = (
     params: TourPlacesParams,
-    options?: {enabled?: boolean}
+    options?: { enabled?: boolean }
 ) => {
     return useInfiniteQuery({
         queryKey: tourKeys.placeList(params),
-        queryFn: ({pageParam}) => getTourPlaces({
+        queryFn: ({ pageParam }) => getTourPlaces({
             ...params,
             pageNo: pageParam
         }),
@@ -46,12 +46,12 @@ export const useTourSearch = (
 ) => {
     return useInfiniteQuery({
         queryKey: tourKeys.placeList(params),
-        queryFn: ({pageParam}) => getTourSearch({
+        queryFn: ({ pageParam }) => getTourSearch({
             ...params,
             pageNo: pageParam
         }),
         initialPageParam: 1,
-        getNextPageParam: (lastPage,allPages) => {
+        getNextPageParam: (lastPage, allPages) => {
             const firstPage = allPages[0];
 
             const totalPages = Math.ceil(
@@ -68,4 +68,29 @@ export const useTourSearch = (
     });
 }
 
+export const useTourDetailCommon = (
+    contentId: string
+) => {
+    return useQuery({
+        queryKey: tourKeys.detailCommon(
+            contentId ?? ''
+        ),
+        queryFn: () => getTourDetailCommon({ contentId }),
+        enabled: !!contentId
+    })
+}
+
+export const useTourDetailInfo = (
+    contentId?: string,
+    contentTypeId?: string
+) => {
+    return useQuery({
+        queryKey: contentId && contentTypeId ? tourKeys.detailInfo(contentId ,contentTypeId ) : ['tours', 'detailInfo', 'disabled'],
+        queryFn: () => getTourDetailInfo({ 
+            contentId: contentId!,
+            contentTypeId: contentTypeId!
+        }),
+        enabled: !!contentId  && !!contentTypeId
+    })
+}
 

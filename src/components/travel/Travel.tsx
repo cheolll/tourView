@@ -2,13 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import './Travel.css';
 import { useRegions, useTourPlaces, useTourSearch } from '../../queries/tourQueries';
 import { useNavigate } from 'react-router-dom';
+import { contentTypes, type ContentType } from '../../types/tour';
 
 
 const Travel = () => {
   const [selectedRegionCode, setSelectedRegionCode] = useState<string>();
+  const [selectedContentType, setSelectedContentType] = useState<ContentType>(contentTypes[0]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [searchParams, setSearchParams] = useState('');
   const [showTopButton, setShowTopButton] = useState(false);
+
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,7 +33,7 @@ const Travel = () => {
   } = useTourPlaces(
     {
       numOfRows: 10,
-      contentTypeId: '12',
+      contentTypeId: selectedContentType.code,
       lDongRegnCd: selectedRegionCode,
     },
     {
@@ -150,6 +153,25 @@ const Travel = () => {
                     onClick={() => setSelectedRegionCode(region.code)}
                   >
                     {region.name}
+                  </button>
+                ))}
+              </div>
+
+              <span className="travel__region-label travel__content-type-label"> 관광 타입 </span>
+              
+              <div className="travel__regions">
+                {!isLoadingRegions && contentTypes.map((content) => (
+                  <button
+                    type="button"
+                    key={content.code ?? 'all'}
+                    className={
+                      (selectedContentType.code ?? '') === (content.code ?? '')
+                        ? 'active'
+                        : ''
+                    }
+                    onClick={() => setSelectedContentType(content)}
+                  >
+                    {content.name}
                   </button>
                 ))}
               </div>

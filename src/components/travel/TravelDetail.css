@@ -1,45 +1,494 @@
 .travel-detail {
   min-height: 100vh;
-  background: #fff;
+  background: #f5f5f5;
   color: #171717;
 }
 
 .travel-detail__inner {
-  width: min(1120px, calc(100% - 80px));
+  width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
-  padding: 60px 0 120px;
+  padding: 32px 0 120px;
 }
 
-.travel-detail__back {
-  display: inline-flex;
+/* Hero */
+
+.travel-detail__hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+
+  min-height: 500px;
+
+  background: #fff;
+}
+
+.travel-detail__image {
+  width: 100%;
+  height: 500px;
+
+  overflow: hidden;
+  background: #e9e9e6;
+}
+
+.travel-detail__image img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+.travel-detail__hero:hover .travel-detail__image img {
+  transform: scale(1.02);
+}
+
+.travel-detail__image-empty {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 
-  padding: 0;
+  color: #aaa;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
 
-  border: 0;
-  background: transparent;
+
+/* Hero Info */
+
+.travel-detail__hero-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 64px;
+}
+
+.travel-detail__category {
+  margin-bottom: 18px;
+
+  color: #999;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.travel-detail__hero-info h1 {
+  margin: 0 0 24px;
+
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+
+  word-break: keep-all;
+}
+
+.travel-detail__address {
+  margin: 0;
 
   color: #777;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  line-height: 1.7;
+  word-break: keep-all;
+}
 
+
+/* Actions */
+
+.travel-detail__actions {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 32px;
+}
+
+.travel-detail__actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 80px;
+  padding: 10px 14px;
+
+  border: 1px solid #ddd;
+
+  color: #444;
+  background: #fff;
+
+  font-size: 11px;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.travel-detail__actions a:hover {
+  border-color: #171717;
+  background: #171717;
+  color: #fff;
+}
+
+
+/* Section */
+
+.travel-detail__section {
+  padding: 64px 0;
+
+  border-bottom: 1px solid #dededb;
+}
+
+.travel-detail__section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+
+  margin-bottom: 28px;
+}
+
+.travel-detail__section-title span {
+  color: #aaa;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.travel-detail__section-title h2 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+
+/* Overview */
+
+.travel-detail__overview {
+  max-width: 850px;
+  margin: 0;
+
+  color: #444;
+  font-size: 15px;
+  line-height: 2;
+
+  word-break: keep-all;
+}
+
+
+/* Location */
+
+.travel-detail__location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  gap: 40px;
+}
+
+.travel-detail__location strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.travel-detail__location p {
+  margin: 8px 0 0;
+
+  color: #777;
+  font-size: 12px;
+}
+
+.travel-detail__location > span {
+  flex-shrink: 0;
+
+  color: #aaa;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+
+
+.travel-detail__location-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+
+.travel-detail__location-mark {
+  font-size: 14px;
+  color: #999;
+}
+
+.travel-detail__location-info strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.travel-detail__location-info span {
+  color: #666;
+  font-size: 14px;
+}
+
+.travel-detail__location-info span:last-child {
+  font-size: 14px;
+  color: #777;
+}
+
+
+/* Detail */
+
+.travel-detail__detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 28px;
+
+  background: #fff;
+}
+
+.travel-detail__detail > span {
+  color: #999;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.travel-detail__detail > p {
+  margin: 0;
+
+  color: #777;
+  font-size: 12px;
+}
+
+
+/* Loading / Error */
+
+.travel-detail__state {
+  min-height: 500px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #888;
+  font-size: 13px;
+}
+
+
+/* Tablet */
+
+@media (max-width: 900px) {
+  .travel-detail__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .travel-detail__image {
+    height: 420px;
+  }
+
+  .travel-detail__hero-info {
+    padding: 48px;
+  }
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .travel-detail__inner {
+    width: calc(100% - 32px);
+    padding: 24px 0 80px;
+  }
+
+  .travel-detail__hero {
+    display: block;
+  }
+
+  .travel-detail__image {
+    height: 300px;
+  }
+
+  .travel-detail__hero-info {
+    padding: 36px 24px 40px;
+  }
+
+  .travel-detail__hero-info h1 {
+    margin-bottom: 20px;
+
+    font-size: 40px;
+  }
+
+  .travel-detail__actions {
+    margin-top: 24px;
+  }
+
+  .travel-detail__section {
+    padding: 48px 0;
+  }
+
+  .travel-detail__overview {
+    font-size: 14px;
+    line-height: 1.9;
+  }
+
+  .travel-detail__location {
+    display: block;
+  }
+
+  .travel-detail__location > div:last-child {
+      margin-top: 16px;
+  }
+
+  .travel-detail__location > span {
+    display: block;
+
+    margin-top: 16px;
+  }
+
+  .travel-detail__detail {
+    display: block;
+    padding: 24px;
+  }
+
+  .travel-detail__detail > p {
+    margin-top: 8px;
+  }
+}
+
+.travel-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+}
+
+.travel-detail__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 24px;
+
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.travel-detail__info-item span {
+  color: #999;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.travel-detail__info-item strong {
+  color: #333;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.travel-detail__floating-nav {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.travel-detail__floating-nav button {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  background: #fff;
+
+  color: #111;
   cursor: pointer;
 
-  transition: color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.travel-detail__back span {
-  font-size: 20px;
+.travel-detail__floating-nav button:hover {
+  background: #111;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.travel-detail__floating-nav span {
+  font-size: 18px;
   line-height: 1;
-
-  transition: transform 0.2s ease;
 }
 
-.travel-detail__back:hover {
-  color: #171717;
+.travel-detail__floating-nav small {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
-.travel-detail__back:hover span {
-  transform: translateX(-4px);
+.travel-detail__floating-nav button:focus {
+    outline: none;
+    background: #fff;
+    color: #111;
 }
+
+@media (max-width: 600px) {
+  .travel-detail__floating-nav {
+    right: 16px;
+    bottom: 16px;
+    gap: 6px;
+  }
+
+  .travel-detail__floating-nav button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .travel-detail__floating-nav span {
+    font-size: 16px;
+  }
+
+  .travel-detail__floating-nav small {
+    font-size: 7px;
+  }
+}
+
+.travel-detail__map {
+  width: 100%;
+  max-width: 680px;
+  height: 360px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+.travel-detail__map img {
+  width: auto;
+  max-width: none !important;
+  height: auto;
+}
+

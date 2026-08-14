@@ -1,12 +1,20 @@
 import { regionNameMap } from "../constants/regions";
 import type { Region, RegionApiItem } from "../types/region";
-import type { TourSearchParams, TourPlacesParams, TourListResponse } from "../types/tour";
+import type { TourSearchParams, TourPlacesParams, TourListResponse} from "../types/tour";
+import type { TourDetailCommonParams, TourDetailCommonResponse, TourDetailInfoParams, TourDetailInfoResponse } from "../types/tourDetail";
 import { apiClient } from "./client";
 
 
 const serviceKey = decodeURIComponent(
-  import.meta.env.VITE_TOUR_API_KEY
+    import.meta.env.VITE_TOUR_API_KEY
 );
+
+const commonParams = {
+    MobileOS: import.meta.env.VITE_TOUR_MOBILE_OS,
+    MobileApp: import.meta.env.VITE_TOUR_MOBILE_APP,
+    serviceKey: serviceKey,
+    _type: 'json',
+};
 
 export const getTourPlaces = async (
     params: TourPlacesParams
@@ -15,13 +23,8 @@ export const getTourPlaces = async (
         '/areaBasedList2', 
         {
             params: {
+                ...commonParams,
                 ...params,
-
-                MobileOS: import.meta.env.VITE_TOUR_MOBILE_OS,
-                MobileApp: import.meta.env.VITE_TOUR_MOBILE_APP,
-                serviceKey,
-
-                _type: 'json',
             },
         }
     ); 
@@ -44,13 +47,8 @@ export const getTourSearch = async (
         '/searchKeyword2', 
         {
             params: {
+                ...commonParams,
                 ...params,
-
-                MobileOS: import.meta.env.VITE_TOUR_MOBILE_OS,
-                MobileApp: import.meta.env.VITE_TOUR_MOBILE_APP,
-                serviceKey,
-
-                _type: 'json',
             },
         }
     ); 
@@ -71,11 +69,8 @@ export const getRegions = async ():Promise<Region[]> => {
     const response = await apiClient.get('/ldongCode2',
         {
             params: {
-                MobileOS: import.meta.env.VITE_TOUR_MOBILE_OS,
-                MobileApp: import.meta.env.VITE_TOUR_MOBILE_APP,
-                serviceKey,
+                ...commonParams,
                 numOfRows: 20,
-                _type: 'json',
             }
         }
     )
@@ -90,3 +85,41 @@ export const getRegions = async ():Promise<Region[]> => {
         })),
     ];
 };
+
+
+/**
+ * 상세페이지 API
+ */
+export const getTourDetailCommon = async (
+    params: TourDetailCommonParams
+): Promise<TourDetailCommonResponse> => {
+    const response = await apiClient.get('/detailCommon2',{
+        params: {
+            ...commonParams,
+            ...params
+        }
+    })
+
+    const body = response.data.response.body
+
+    return {
+        item: body.items?.item?.[0] ?? null
+    };
+}
+
+export const getTourDetailInfo = async (
+    params: TourDetailInfoParams
+): Promise<TourDetailInfoResponse> => {
+    const response = await apiClient.get('/detailIntro2',{
+        params: {
+            ...commonParams,
+            ...params
+        }
+    })
+
+    const body = response.data.response.body
+
+    return {
+        item: body.items?.item?.[0] ?? null
+    };
+}

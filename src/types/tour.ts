@@ -20,7 +20,7 @@ lclsSystm1	분류체계 대분류	0	NA	분류체계 대분류
 lclsSystm2	분류체계 중분류	0	NA04	분류체계 중분류
 lclsSystm3	분류체계 소분류	0	NA040500	분류체계 소분류
  */
-export interface TourItem {
+export interface TourListItem {
     addr1?: string;
     addr2?: string;
     
@@ -70,7 +70,7 @@ export interface TourApiResponse {
 
         body: {
             items: {
-                item: TourItem[]
+                item: TourListItem[]
             }
 
             numOfRows: number;
@@ -81,7 +81,7 @@ export interface TourApiResponse {
 }
 
 export interface TourListResponse {
-    items: TourItem[];
+    items: TourListItem[];
     pageNo: number;
     numOfRows: number;
     totalCount: number;
@@ -146,3 +146,23 @@ export interface TourPlacesParams {
     lclsSystm2?: string;
     lclsSystm3?: string;
 }
+
+
+export interface ContentType {
+  name: string;
+  code?: string;
+}
+
+export const contentTypes: ContentType[] = [
+  { name: '전체' },
+  { name: '관광지', code: '12' },
+  { name: '문화시설', code: '14' },
+  { name: '축제·공연·행사', code: '15' },
+  { name: '여행코스', code: '25' },
+  { name: '레포츠', code: '28' },
+  { name: '숙박', code: '32' },
+  { name: '쇼핑', code: '38' },
+  { name: '음식점', code: '39' },
+];
+
+

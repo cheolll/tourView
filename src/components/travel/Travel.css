@@ -91,6 +91,10 @@
   color: #999;
 }
 
+.travel__content-type-label {
+  margin-top: 24px;
+}
+
 .travel__regions {
   display: flex;
   gap: 8px;

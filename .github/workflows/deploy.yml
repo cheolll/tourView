@@ -30,7 +30,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_TOUR_SERVICE_KEY: ${{ secrets.VITE_TOUR_SERVICE_KEY }}
+          VITE_TOUR_API_KEY: ${{ secrets.VITE_TOUR_API_KEY }}
           VITE_TOUR_API_URL: ${{ secrets.VITE_TOUR_API_URL }}
           VITE_TOUR_MOBILE_OS: WEB
           VITE_TOUR_MOBILE_APP: tourView

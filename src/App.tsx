@@ -10,7 +10,7 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <BrowserRouter basename='/tourView'>
           <Routes>
             <Route path='/' element={<Travel />}/>
             <Route path='/travel/:contentId' element={<TravelDetail />}/>

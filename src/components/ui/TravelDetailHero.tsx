@@ -6,7 +6,11 @@ interface Props {
 
 const TravelDetailHero = ({ item }: Props) => {
 
-    const homepageUrl = item.homepage?.match(/href=["']([^"']+)["']/i)?.[1] ?? '';
+    const homepageUrl =
+    item.homepage?.match(/href=["']([^"']+)["']/i)?.[1] ??
+    item.homepage?.match(/\]\((https?:\/\/[^)]+)\)/i)?.[1] ??
+    item.homepage?.match(/https?:\/\/[^\s<>"')]+/i)?.[0] ??
+    '';
   return (
     <section className="travel-detail__hero">
       <div className="travel-detail__image">
